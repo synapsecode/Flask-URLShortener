@@ -1,0 +1,89 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" href="/static/style.css">
+    <title>URL Shortener</title>
+  </head>
+  <body>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="visibility: hidden;" id="linkready">
+  Launch demo modal
+</button>
+    <div class="container">
+      <center>
+        <div class="maincard">
+          	<div class="yt-container">
+			  <center>
+				<textarea name="og-link" id="ourl" cols="30" rows="5" class="form-control bg-dark" placeholder="Enter URL" spellcheck="false"></textarea>
+				<input type="button" value="Shorten this URL" class="btn btn-dark btn-block mt-3" id="shorten">
+			  </center>	
+			</div>
+        </div>
+      </center>
+    </div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog bg-dark" role="document">
+			<div class="modal-content">
+				<div class="modal-header  bg-dark text-light">
+					<h5 class="modal-title"id="exampleModalLabel">Your Shortened URL is ready!</h5>
+					</button>
+				</div>
+				<div class="modal-body  bg-dark text-light">
+					<center>
+						<h3><a href="#" id="surl" class="text-success">...</a></h3>
+					</center>
+				</div>
+				<div class="modal-footer  bg-dark text-light">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--<div class="app-title">
+				<p>URL Shortener Service</p>
+			</div>-->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  
+  	<script>
+		document.getElementById("shorten").onclick = () => {
+			payload={
+				og_link: document.getElementById("ourl").value
+			};
+			fetch(`${window.origin}/s`, {
+				method: "POST",
+				credentials: "include",
+				body: JSON.stringify(payload),
+				cache: "no-cache",
+				headers: new Headers({
+				"content-type": "application/json"
+				})
+			}).then((res) => {
+				if(res.status != 200){
+				console.log("Response status was not 200: " + res.status + "")
+				return ;
+				}
+				res.json().then((data) => {
+					console.log(data);
+					document.getElementById("linkready").click();
+					document.getElementById("surl").href = data['s_url'];
+					document.getElementById("surl").innerHTML = data['s_url'];
+
+				})
+			})
+		};	
+	</script>
+  </body>
+</html>
